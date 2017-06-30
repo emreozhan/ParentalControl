@@ -15,7 +15,7 @@ namespace Win
 {
     public partial class Form1 : Form
     {
-        static int DKSINIRI=180;
+        int MINLIMIT=180;
         int TODAY=0;
         int MONTH = 0;
         int YEAR= 0;
@@ -41,10 +41,15 @@ namespace Win
             MONTH = UTCNow.Month;
             YEAR = UTCNow.Year;
            
-            dosya_yolu = @"E:\EmreZamanLog\" + TODAY.ToString()+"."+ MONTH.ToString()+"."+YEAR.ToString() + ".txt";
+            string settingPath=GetLogPathFromTxt();
+           
+            if(settingPath==null)
+                settingPath = "C:\\";
+
+//            dosya_yolu = @"E:\EmreZamanLog\" + TODAY.ToString()+"."+ MONTH.ToString()+"."+YEAR.ToString() + ".txt";
+            dosya_yolu = settingPath + TODAY.ToString() + "." + MONTH.ToString() + "." + YEAR.ToString() + ".txt";
             
-            
-            appHizala.Interval = 3700;//7 Sn
+            appHizala.Interval = 4700;//7 Sn
             logUpdate.Interval = 300 * 1000;//5 Dk 
             appHizala.Start();
            
@@ -63,9 +68,14 @@ namespace Win
 
 
         private void button1_Click(object sender, EventArgs e)
-        {            
-            ACTIVEUSER = textBox1.Text.ToLower();
-            ACTIVEPW = textBox2.Text.ToLower();
+        {
+            StartTime();
+            refreshALertLabel.Visible = false;
+        }
+
+        public void StartTime()
+        {
+            ACTIVEUSER = UserNameTextBox.Text.ToLower();
             if (ACTIVEUSER.Equals("eren"))
             {
                 appHizala.Start();
@@ -73,17 +83,8 @@ namespace Win
                 LogRead(ACTIVEUSER);
 
                 System.Diagnostics.Process.Start("shutdown", "-a");
-                System.Diagnostics.Process.Start("shutdown", "-s -t " + ((DKSINIRI - ToplamSure)*60).ToString() + "");
-
+                System.Diagnostics.Process.Start("shutdown", "-s -t " + ((MINLIMIT - ToplamSure) * 60).ToString() + "");
             }
-            else if (ACTIVEUSER.Equals("root") && ACTIVEPW.Equals("root"))
-                    {
-                        System.Diagnostics.Process.Start("shutdown", "-a");
-                        appHizala.Stop();
-                        logUpdate.Stop();
-                        TopMost = false;
-                    }
-
         }
 
         public void LogWrite()
@@ -121,19 +122,18 @@ namespace Win
 
             }
 
-            if (ToplamSure > DKSINIRI)
+            if (ToplamSure > MINLIMIT)
             {               
-                label3.Text=("SUREN DOLDU 2.5DK İÇİNDE PC KAPATILACAK");
+                remainingMinLabel.Text=("Time's Up Computer Will Shutdown in 2.5 Min");
                 TopMost = true;
                 appHizala.Start();
                 logUpdate.Stop();
                 System.Diagnostics.Process.Start("shutdown", "-a");
-
                 System.Diagnostics.Process.Start("shutdown","-s -t 150");
             }
             else
             {
-                label3.Text = ("Bugünlük Kalan Süren" + (DKSINIRI - ToplamSure).ToString());
+                remainingMinLabel.Text = ("Remaining Min For Today" + (MINLIMIT - ToplamSure).ToString());
                appHizala.Stop();
                TopMost = false;
 
@@ -154,11 +154,6 @@ namespace Win
             LogWrite();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (textBox1.Text.Equals("root"))
-            { this.Close();}
-        }
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -183,7 +178,7 @@ namespace Win
             if (e.KeyCode == Keys.Alt)
             {
                 e.SuppressKeyPress = true;
-                label1.Text = "ent";
+                userNameLabel.Text = "ent";
             }
         }
 
@@ -217,7 +212,7 @@ namespace Win
             
             File.AppendAllText(@"" + dosya_yolu + "", "x;x;0;" + cikisTotal.ToString() + Environment.NewLine);
 
-            if (textBox1.Text == "root" && textBox2.Text == "root")
+            if (adminPwTextBox.Text == "root")
             {
                 System.Diagnostics.Process.Start("shutdown", "-a");
             }
@@ -225,6 +220,91 @@ namespace Win
                 System.Diagnostics.Process.Start("shutdown", "-a");
                 System.Diagnostics.Process.Start("shutdown", "-s -t 30");
             }
+        }
+
+
+        private void logPathSelect_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if(fbd.ShowDialog()==System.Windows.Forms.DialogResult.OK)
+            {
+                MessageBox.Show("Ok");
+                SetLogPath(fbd.SelectedPath);
+                logPathTextBox.Text = fbd.SelectedPath;
+
+            }
+        }
+
+        public void SetLogPath(string path=null)
+        {
+            string existingPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
+            FileStream fs = new FileStream(existingPath, FileMode.Truncate, FileAccess.Write);
+            fs.Close();
+            File.AppendAllText(@"" + existingPath + "", path);
+        
+        }
+
+        public string GetLogPathFromTxt()
+        {
+           
+            string existingPath = Path.GetDirectoryName(Application.ExecutablePath)+"\\settings.txt";
+          
+            FileStream fs = new FileStream(existingPath, FileMode.OpenOrCreate, FileAccess.Read);
+            
+            StreamReader sw = new StreamReader(fs);
+            
+            string path = sw.ReadLine();
+            fs.Close();
+
+            return path;
+        }
+
+        private void addMinute_Click(object sender, EventArgs e)
+        {
+            MINLIMIT += Convert.ToInt32(addMinTextBox.Text);
+            remainingMinLabel.Text = ("Remaining Min For Today" + (MINLIMIT - ToplamSure).ToString());
+        }
+
+        private void adminButon_Click(object sender, EventArgs e)
+        {
+            if (adminPwTextBox.Text == "root")
+            {
+                AdminPanel.Visible = true;
+                appHizala.Stop();
+                logUpdate.Stop();
+                TopMost = false;
+
+                logPathTextBox.Text = GetLogPathFromTxt();
+                
+            }
+        }
+
+        private void adminExit_Click(object sender, EventArgs e)
+        {
+            if (adminPwTextBox.Text == "root")
+            {
+                AdminPanel.Visible = false;
+                refreshALertLabel.Visible = true;
+                adminPwTextBox.Text = "";
+            }
+        }
+
+        private void killButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("shutdown", "-a");
+            this.Close();
+        }
+
+        private void openLogPathFolder_Click(object sender, EventArgs e)
+        {
+            Process.Start(@Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt");
+
+        }
+
+        private void openLogRecords_Click(object sender, EventArgs e)
+        {
+            Process.Start(@GetLogPathFromTxt());
+
         }
 
      

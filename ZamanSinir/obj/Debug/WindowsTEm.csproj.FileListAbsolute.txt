@@ -15,3 +15,10 @@ C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\Interop.Shell32.
 C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\WindowsTEm.csproj.ResolveComReference.cache
 C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\emre.exe
 C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\emre.pdb
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\bin\Debug\emre.exe
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\bin\Debug\emre.pdb
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\bin\Debug\Interop.Shell32.dll
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\WindowsTEm.csprojResolveAssemblyReference.cache
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\Win.Form1.resources
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\Win.Properties.Resources.resources
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\WindowsTEm.csproj.GenerateResource.Cache
