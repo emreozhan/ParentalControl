@@ -22,3 +22,4 @@ C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\WindowsTEm.cspro
 C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\Win.Form1.resources
 C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\Win.Properties.Resources.resources
 C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\WindowsTEm.csproj.GenerateResource.Cache
+C:\Users\Emre\Source\Repos\ParentalControl\ZamanSinir\obj\Debug\Interop.IWshRuntimeLibrary.dll

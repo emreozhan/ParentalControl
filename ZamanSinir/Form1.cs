@@ -41,15 +41,23 @@ namespace Win
             YEAR = UTCNow.Year;
            
             string settingPath=GetLogPathFromTxt();
-           
-            if(settingPath==null)
-                settingPath = "E:";
+
+            if (settingPath == null)
+            { 
+              userPanel.Enabled = false;
+
+            }
+            else
+            {
+                dosya_yolu = settingPath + "\\" + TODAY.ToString() + "." + MONTH.ToString() + "." + YEAR.ToString() + ".txt";
+                logUpdate.Interval = 300 * 1000;//5 Dk 
+                InnerAdminPanel.Enabled = true;
+            }
+
 
 //            dosya_yolu = @"E:\EmreZamanLog\" + TODAY.ToString()+"."+ MONTH.ToString()+"."+YEAR.ToString() + ".txt";
-            dosya_yolu = settingPath + "\\" + TODAY.ToString() + "." + MONTH.ToString() + "." + YEAR.ToString() + ".txt";
             
             appHizala.Interval = 4700;//7 Sn
-            logUpdate.Interval = 300 * 1000;//5 Dk 
             appHizala.Start();
            
         }
@@ -121,7 +129,7 @@ namespace Win
 
             }
 
-            if (ToplamSure > MINLIMIT)
+            if (ToplamSure >= MINLIMIT)
             {               
                 remainingMinLabel.Text=("Time's Up Computer Will Shutdown in 2.5 Min");
                 TopMost = true;
@@ -188,28 +196,32 @@ namespace Win
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            FileStream fs = new FileStream(dosya_yolu, FileMode.OpenOrCreate, FileAccess.Read);
-            StreamReader sw = new StreamReader(fs);
-            string yazi = sw.ReadLine();
-            int cikisTotal = 0;
-
-            while (yazi != null)
+            if (dosya_yolu != null)
             {
-
-                string[] parsed = yazi.Split(';');
-                if (parsed[0].Equals(TODAY.ToString()) && parsed[1].Equals(UserNameTextBox.Text))
-                {
-                    cikisTotal += Convert.ToInt32(parsed[2]);
-                }
-                yazi = sw.ReadLine();
-
-            }
-            fs.Close();
-
-            FileStream fsYaz = new FileStream(dosya_yolu, FileMode.OpenOrCreate, FileAccess.Write);
-            fsYaz.Close();
+                FileStream fs = new FileStream(dosya_yolu, FileMode.OpenOrCreate, FileAccess.Read);
+                StreamReader sw = new StreamReader(fs);
+                string yazi = sw.ReadLine();
+                int cikisTotal = 0;
             
-            File.AppendAllText(@"" + dosya_yolu + "", "x;x;0;" + cikisTotal.ToString() + Environment.NewLine);
+                while (yazi != null)
+                {
+
+                    string[] parsed = yazi.Split(';');
+                    if (parsed[0].Equals(TODAY.ToString()) && parsed[1].Equals(UserNameTextBox.Text))
+                    {
+                        cikisTotal += Convert.ToInt32(parsed[2]);
+                    }
+                    yazi = sw.ReadLine();
+
+                }
+
+                fs.Close();
+
+                FileStream fsYaz = new FileStream(dosya_yolu, FileMode.OpenOrCreate, FileAccess.Write);
+                fsYaz.Close();
+            
+                File.AppendAllText(@"" + dosya_yolu + "", "x;x;0;" + cikisTotal.ToString() + Environment.NewLine);
+            }
 
             if (adminPwTextBox.Text == "root")
             {
@@ -219,6 +231,7 @@ namespace Win
                 System.Diagnostics.Process.Start("shutdown", "-a");
                 System.Diagnostics.Process.Start("shutdown", "-s -t 30");
             }
+            
         }
 
 
@@ -231,6 +244,8 @@ namespace Win
                 SetLogPath(fbd.SelectedPath);
                 logPathTextBox.Text = fbd.SelectedPath;
 
+                Application.Restart();
+                Environment.Exit(0);
             }
         }
 
@@ -274,7 +289,9 @@ namespace Win
                 TopMost = false;
 
                 logPathTextBox.Text = GetLogPathFromTxt();
-                
+                this.BackColor = System.Drawing.Color.Brown;
+                AdminPanel.BackColor = System.Drawing.Color.WhiteSmoke;
+
             }
         }
 
@@ -285,6 +302,8 @@ namespace Win
                 AdminPanel.Visible = false;
                 refreshALertLabel.Visible = true;
                 adminPwTextBox.Text = "";
+                this.BackColor = System.Drawing.Color.Empty;
+
             }
         }
 
@@ -306,30 +325,26 @@ namespace Win
 
         }
 
-        private void CreataShortCutForStartup()
+        private void appShortcutToDesktop(string linkName)
         {
-            string exePath = Application.ExecutablePath;
-            string copyPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            copyPath += "\\" + Path.GetFileName(exePath);
-           
-            bool exist = File.Exists(copyPath);
-           
-            if (exist)
-            {
-                File.Delete(copyPath);
-                File.Copy(exePath, copyPath);
-            }
-            else
-            {
-                File.Copy(exePath, copyPath); 
-            }
-            
-        }
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
 
+            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + linkName + ".url"))
+            {
+                string app = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                writer.WriteLine("[InternetShortcut]");
+                writer.WriteLine("URL=file:///" + app);
+                writer.WriteLine("IconIndex=0");
+                string icon = app.Replace('\\', '/');
+                writer.WriteLine("IconFile=" + icon);
+                writer.Flush();
+            }
+        }
         private void shortcut_Click(object sender, EventArgs e)
         {
-            CreataShortCutForStartup();
+            appShortcutToDesktop("emre");
         }
+
      
     }
 }
