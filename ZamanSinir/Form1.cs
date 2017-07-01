@@ -23,7 +23,6 @@ namespace Win
         int MIN = 0;
 
         string ACTIVEUSER=null;
-        string ACTIVEPW = null;
         string dosya_yolu = null;
         int ToplamSure = 0;
 
@@ -47,7 +46,7 @@ namespace Win
                 settingPath = "C:\\";
 
 //            dosya_yolu = @"E:\EmreZamanLog\" + TODAY.ToString()+"."+ MONTH.ToString()+"."+YEAR.ToString() + ".txt";
-            dosya_yolu = settingPath + TODAY.ToString() + "." + MONTH.ToString() + "." + YEAR.ToString() + ".txt";
+            dosya_yolu = settingPath + "\\" + TODAY.ToString() + "." + MONTH.ToString() + "." + YEAR.ToString() + ".txt";
             
             appHizala.Interval = 4700;//7 Sn
             logUpdate.Interval = 300 * 1000;//5 Dk 
@@ -198,7 +197,7 @@ namespace Win
             {
 
                 string[] parsed = yazi.Split(';');
-                if (parsed[0].Equals(TODAY.ToString()) && parsed[1].Equals("eren"))
+                if (parsed[0].Equals(TODAY.ToString()) && parsed[1].Equals(UserNameTextBox.Text))
                 {
                     cikisTotal += Convert.ToInt32(parsed[2]);
                 }
@@ -307,6 +306,30 @@ namespace Win
 
         }
 
+        private void CreataShortCutForStartup()
+        {
+            string exePath = Application.ExecutablePath;
+            string copyPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            copyPath += "\\" + Path.GetFileName(exePath);
+           
+            bool exist = File.Exists(copyPath);
+           
+            if (exist)
+            {
+                File.Delete(copyPath);
+                File.Copy(exePath, copyPath);
+            }
+            else
+            {
+                File.Copy(exePath, copyPath); 
+            }
+            
+        }
+
+        private void shortcut_Click(object sender, EventArgs e)
+        {
+            CreataShortCutForStartup();
+        }
      
     }
 }
