@@ -50,6 +50,8 @@
             this.adminPwTextBox = new System.Windows.Forms.TextBox();
             this.adminLabel = new System.Windows.Forms.Label();
             this.refreshALertLabel = new System.Windows.Forms.Label();
+            this.shortcut = new System.Windows.Forms.Button();
+            this.addMinuteLabel = new System.Windows.Forms.Label();
             this.AdminPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,9 +95,9 @@
             this.remainingMinLabel.AutoSize = true;
             this.remainingMinLabel.Location = new System.Drawing.Point(108, 157);
             this.remainingMinLabel.Name = "remainingMinLabel";
-            this.remainingMinLabel.Size = new System.Drawing.Size(77, 13);
+            this.remainingMinLabel.Size = new System.Drawing.Size(83, 13);
             this.remainingMinLabel.TabIndex = 6;
-            this.remainingMinLabel.Text = "Remaining Min";
+            this.remainingMinLabel.Text = "Remaining Min :";
             // 
             // button3
             // 
@@ -120,6 +122,8 @@
             // 
             // AdminPanel
             // 
+            this.AdminPanel.Controls.Add(this.addMinuteLabel);
+            this.AdminPanel.Controls.Add(this.shortcut);
             this.AdminPanel.Controls.Add(this.openLogRecords);
             this.AdminPanel.Controls.Add(this.openLogPathFolder);
             this.AdminPanel.Controls.Add(this.killButton);
@@ -131,44 +135,46 @@
             this.AdminPanel.Controls.Add(this.addMinTextBox);
             this.AdminPanel.Location = new System.Drawing.Point(425, 105);
             this.AdminPanel.Name = "AdminPanel";
-            this.AdminPanel.Size = new System.Drawing.Size(366, 271);
+            this.AdminPanel.Size = new System.Drawing.Size(366, 340);
             this.AdminPanel.TabIndex = 9;
             this.AdminPanel.Visible = false;
             // 
             // openLogRecords
             // 
-            this.openLogRecords.Location = new System.Drawing.Point(32, 153);
+            this.openLogRecords.Location = new System.Drawing.Point(32, 200);
             this.openLogRecords.Name = "openLogRecords";
-            this.openLogRecords.Size = new System.Drawing.Size(125, 23);
+            this.openLogRecords.Size = new System.Drawing.Size(155, 23);
             this.openLogRecords.TabIndex = 9;
             this.openLogRecords.Text = "Open Log Records";
+            this.openLogRecords.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.openLogRecords.UseVisualStyleBackColor = true;
             this.openLogRecords.Click += new System.EventHandler(this.openLogRecords_Click);
             // 
             // openLogPathFolder
             // 
-            this.openLogPathFolder.Location = new System.Drawing.Point(32, 115);
+            this.openLogPathFolder.Location = new System.Drawing.Point(32, 171);
             this.openLogPathFolder.Name = "openLogPathFolder";
-            this.openLogPathFolder.Size = new System.Drawing.Size(125, 23);
+            this.openLogPathFolder.Size = new System.Drawing.Size(155, 23);
             this.openLogPathFolder.TabIndex = 8;
             this.openLogPathFolder.Text = "Open Log Path Setting Folder";
+            this.openLogPathFolder.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.openLogPathFolder.UseVisualStyleBackColor = true;
             this.openLogPathFolder.Click += new System.EventHandler(this.openLogPathFolder_Click);
             // 
             // killButton
             // 
-            this.killButton.Location = new System.Drawing.Point(236, 215);
+            this.killButton.Location = new System.Drawing.Point(205, 277);
             this.killButton.Name = "killButton";
-            this.killButton.Size = new System.Drawing.Size(92, 25);
+            this.killButton.Size = new System.Drawing.Size(147, 31);
             this.killButton.TabIndex = 7;
-            this.killButton.Text = "Close Program";
+            this.killButton.Text = "Stop and Close Program";
             this.killButton.UseVisualStyleBackColor = true;
             this.killButton.Click += new System.EventHandler(this.killButton_Click);
             // 
             // adminExit
             // 
             this.adminExit.ForeColor = System.Drawing.Color.Red;
-            this.adminExit.Location = new System.Drawing.Point(32, 204);
+            this.adminExit.Location = new System.Drawing.Point(32, 277);
             this.adminExit.Name = "adminExit";
             this.adminExit.Size = new System.Drawing.Size(125, 36);
             this.adminExit.TabIndex = 6;
@@ -205,7 +211,7 @@
             // 
             // addMinute
             // 
-            this.addMinute.Location = new System.Drawing.Point(23, 21);
+            this.addMinute.Location = new System.Drawing.Point(236, 21);
             this.addMinute.Name = "addMinute";
             this.addMinute.Size = new System.Drawing.Size(75, 23);
             this.addMinute.TabIndex = 2;
@@ -224,6 +230,7 @@
             // 
             this.adminPwTextBox.Location = new System.Drawing.Point(512, 58);
             this.adminPwTextBox.Name = "adminPwTextBox";
+            this.adminPwTextBox.PasswordChar = '*';
             this.adminPwTextBox.Size = new System.Drawing.Size(100, 20);
             this.adminPwTextBox.TabIndex = 10;
             // 
@@ -246,6 +253,26 @@
             this.refreshALertLabel.TabIndex = 12;
             this.refreshALertLabel.Text = "<- Click for Refresh";
             this.refreshALertLabel.Visible = false;
+            // 
+            // shortcut
+            // 
+            this.shortcut.Location = new System.Drawing.Point(32, 126);
+            this.shortcut.Name = "shortcut";
+            this.shortcut.Size = new System.Drawing.Size(155, 23);
+            this.shortcut.TabIndex = 10;
+            this.shortcut.Text = "Create Shortcut Startup";
+            this.shortcut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.shortcut.UseVisualStyleBackColor = true;
+            this.shortcut.Click += new System.EventHandler(this.shortcut_Click);
+            // 
+            // addMinuteLabel
+            // 
+            this.addMinuteLabel.AutoSize = true;
+            this.addMinuteLabel.Location = new System.Drawing.Point(29, 27);
+            this.addMinuteLabel.Name = "addMinuteLabel";
+            this.addMinuteLabel.Size = new System.Drawing.Size(61, 13);
+            this.addMinuteLabel.TabIndex = 11;
+            this.addMinuteLabel.Text = "Add Minute";
             // 
             // Form1
             // 
@@ -305,6 +332,8 @@
         private System.Windows.Forms.Button openLogPathFolder;
         private System.Windows.Forms.Button openLogRecords;
         private System.Windows.Forms.Label refreshALertLabel;
+        private System.Windows.Forms.Button shortcut;
+        private System.Windows.Forms.Label addMinuteLabel;
     }
 }
 
