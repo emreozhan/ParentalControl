@@ -43,7 +43,7 @@ namespace Win
             string settingPath=GetLogPathFromTxt();
            
             if(settingPath==null)
-                settingPath = "C:\\";
+                settingPath = "E:";
 
 //            dosya_yolu = @"E:\EmreZamanLog\" + TODAY.ToString()+"."+ MONTH.ToString()+"."+YEAR.ToString() + ".txt";
             dosya_yolu = settingPath + "\\" + TODAY.ToString() + "." + MONTH.ToString() + "." + YEAR.ToString() + ".txt";
